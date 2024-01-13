@@ -11,6 +11,7 @@ import { defaultStyles } from "@/constants/Style";
 import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 
 interface Props {
   listing: any[];
@@ -30,10 +31,14 @@ const Listing = ({ listing: items, category }: Props) => {
   const renderRow: ListRenderItem<any> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
-        <View style={styles.listing}>
-          <Image source={{ uri: item.medium_url }} style={styles.image} />
+        <Animated.View
+          style={styles.listing}
+          entering={FadeInRight}
+          exiting={FadeOutLeft}
+        >
+          <Image source={{ uri: item.xl_picture_url }} style={styles.image} />
           <TouchableOpacity
-            style={{ position: "absolute", right: 30, top: 30 }}
+            style={{ position: "absolute", right: 30, top: 30, zIndex: 2 }}
           >
             <Ionicons name="heart-outline" size={24} color="#000" />
           </TouchableOpacity>
@@ -55,7 +60,7 @@ const Listing = ({ listing: items, category }: Props) => {
             <Text style={{ fontFamily: "mon-sb" }}>€ {item.price}</Text>
             <Text style={{ fontFamily: "mon" }}>night</Text>
           </View>
-        </View>
+        </Animated.View>
       </TouchableOpacity>
     </Link>
   );
@@ -75,12 +80,13 @@ const styles = StyleSheet.create({
   listing: {
     padding: 16,
     gap: 10,
-    marginVertical: 16,
+    marginVertical: 8,
   },
   image: {
     width: "100%",
     height: 300,
     borderRadius: 10,
+    zIndex: 1,
   },
   info: {
     textAlign: "center",
